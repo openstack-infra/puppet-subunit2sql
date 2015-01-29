@@ -17,12 +17,12 @@
 #
 define subunit2sql::worker (
   $config_file,
-  $db_dialect = 'mysql',
-  $db_user = 'subunit2sql',
   $db_pass,
   $db_host,
+  $db_dialect = 'mysql',
+  $db_user = 'subunit2sql',
   $db_port = '3306',
-  $db_name = 'subunit2sql'
+  $db_name = 'subunit2sql',
 ) {
   $suffix = "-${name}"
 

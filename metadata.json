@@ -1,0 +1,12 @@
+{
+  "name": "openstackci-subunit2sql",
+  "version": "0.0.1",
+  "author": "OpenStack CI",
+  "summary": "Puppet module for Subunit2sql",
+  "license": "Apache 2.0",
+  "source": "git://git.openstack.org/openstack-infra/puppet-subunit2sql.git",
+  "project_page": "http://ci.openstack.org/",
+  "issues_url": "https://storyboard.openstack.org/#!/project/798",
+  "dependencies": [
+  ]
+}
