@@ -32,10 +32,26 @@ class subunit2sql::server (
     content => template('subunit2sql/subunit2sql.conf.erb'),
   }
 
+  file {'/etc/subunit2sql-my.cnf':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0400',
+    content => template('subunit2sql/subunit2sql-my.cnf.erb'),
+  }
+
+  exec { 'backup_subunit2sql_db':
+    command     => 'mysqldump --defaults-file=/etc/subunit2sql-my.cnf --opt $db_name | gzip -9 > /opt/subunit2sql.sql.gz',
+    path        => '/usr/local/bin:/usr/bin:/bin/',
+    subscribe   => Package['subunit2sql'],
+    require     => File['/etc/subunit2sql-my.cnf'],
+    refreshonly => true,
+  }
+
   exec { 'upgrade_subunit2sql_db':
     command     => 'subunit2sql-db-manage --config-file /etc/subunit2sql.conf upgrade head',
     path        => '/usr/local/bin:/usr/bin:/bin/',
-    subscribe   => Package['subunit2sql'],
+    subscribe   => Exec['backup_subunit2sql_db'],
     refreshonly => true,
   }
 }
