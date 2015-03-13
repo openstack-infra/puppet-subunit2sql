@@ -68,10 +68,13 @@ define subunit2sql::worker (
   }
 
   service { "jenkins-subunit-worker${suffix}":
-    enable     => true,
-    hasrestart => true,
-    subscribe  => File["/etc/logstash/jenkins-subunit-worker${suffix}.yaml"],
-    require    => [
+    enable      => true,
+    hasrestart  => true,
+    subscribe   => [
+      File["/etc/logstash/jenkins-subunit-worker${suffix}.yaml"],
+      Package['subunit2sql'],
+    ],
+    require     => [
       File['/etc/logstash'],
       File["/etc/init.d/jenkins-subunit-worker${suffix}"],
     ],
