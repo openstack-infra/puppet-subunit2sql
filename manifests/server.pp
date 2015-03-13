@@ -46,6 +46,7 @@ class subunit2sql::server (
     subscribe   => Package['subunit2sql'],
     require     => File['/etc/subunit2sql-my.cnf'],
     refreshonly => true,
+    timeout     => 1800,
   }
 
   exec { 'upgrade_subunit2sql_db':
@@ -53,5 +54,6 @@ class subunit2sql::server (
     path        => '/usr/local/bin:/usr/bin:/bin/',
     subscribe   => Exec['backup_subunit2sql_db'],
     refreshonly => true,
+    timeout     => 0,
   }
 }
