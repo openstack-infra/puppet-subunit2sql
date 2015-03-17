@@ -50,7 +50,7 @@ class subunit2sql::server (
   }
 
   exec { 'upgrade_subunit2sql_db':
-    command     => 'subunit2sql-db-manage --config-file /etc/subunit2sql.conf upgrade head &> /var/log/subunit2sql_migration.log &',
+    command     => 'subunit2sql-db-manage --config-file /etc/subunit2sql.conf upgrade head > /var/log/subunit2sql_migration.log 2>&1 &',
     path        => '/usr/local/bin:/usr/bin:/bin/',
     subscribe   => Exec['backup_subunit2sql_db'],
     refreshonly => true,
