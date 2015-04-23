@@ -22,6 +22,10 @@ class subunit2sql::server (
   $db_host,
   $db_port = '3306',
   $db_name = 'subunit2sql',
+  $expire_age = '186',
+  $expire_cron_minute = '0',
+  $expire_cron_hour = '3',
+  $expire_cron_weekday = '7',
 ) {
 
   file { '/etc/subunit2sql.conf':
@@ -55,5 +59,14 @@ class subunit2sql::server (
     subscribe   => Package['subunit2sql'],
     refreshonly => true,
     timeout     => 0,
+  }
+
+  cron { 'subunit2sql-prune':
+    ensure      => present,
+    command     => 'subunit2sql-db-manage --config-file /etc/subunit2sql.conf expire --expire-age $expire_age >> /var/log/subunit2sql_migration.log 2>&1 & ',
+    minute      => $expire_cron_minute,
+    hour        => $expire_cron_hour,
+    weekday     => $expire_cron_weekday,
+    environment => 'PATH=/usr/local/bin:/usr/bin:/bin/',
   }
 }
