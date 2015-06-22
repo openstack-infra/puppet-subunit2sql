@@ -239,7 +239,6 @@ class Server(object):
                 self.processor.handle_subunit_event()
             except:
                 logging.exception("Exception processing log event.")
-                raise
 
 
 def main():
