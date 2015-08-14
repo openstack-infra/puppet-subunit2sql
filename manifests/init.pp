@@ -17,14 +17,14 @@
 #
 class subunit2sql (
 ) {
-  include pip
+  include ::pip
 
   package {'python-mysqldb':
-    ensure   => present,
+    ensure => present,
   }
 
   package {'python-psycopg2':
-    ensure   => present,
+    ensure => present,
   }
 
   package { 'python-subunit':
