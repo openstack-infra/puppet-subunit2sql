@@ -173,6 +173,7 @@ class Subunit2SQLProcessor(object):
         logging.debug('Converting Subunit V2 stream to SQL')
         stream = read_subunit.ReadSubunit(subunit_v2)
         shell.process_results(stream.get_results())
+        subunit_v2.close()
 
 
 class Server(object):
