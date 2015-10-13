@@ -24,7 +24,6 @@ import logging
 import os
 import Queue
 import socket
-import subprocess
 import threading
 import time
 import urllib2
@@ -92,15 +91,6 @@ class SubunitRetriever(threading.Thread):
             logging.exception("Exception handling log event.")
             job.sendWorkException(str(e).encode('utf-8'))
 
-    def _subunit_1_to_2(self, raw_file):
-        call = subprocess.Popen('subunit-1to2', stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE)
-        output, err = call.communicate(raw_file.read())
-        if err:
-            raise Exception(err)
-        buf = cStringIO.StringIO(output)
-        return buf
-
     def _retrieve_subunit_v2(self, source_url, retry):
         # TODO (clarkb): This should check the content type instead of file
         # extension for determining if gzip was used.
@@ -122,14 +112,11 @@ class SubunitRetriever(threading.Thread):
         if gzipped:
             logging.debug("Decompressing gzipped source file.")
             raw_strIO = cStringIO.StringIO(raw_buf)
-            f = gzip.GzipFile(fileobj=raw_strIO)
-            buf = self._subunit_1_to_2(f)
+            buf = gzip.GzipFile(fileobj=raw_strIO)
             raw_strIO.close()
-            f.close()
         else:
             logging.debug("Decoding source file.")
-            raw_strIO = cStringIO.StringIO(raw_buf)
-            buf = self._subunit_1_to_2(raw_strIO)
+            buf = cStringIO.StringIO(raw_buf)
         return buf
 
     def _get_subunit_data(self, source_url, retry):
