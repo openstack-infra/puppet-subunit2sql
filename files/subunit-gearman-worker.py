@@ -112,8 +112,10 @@ class SubunitRetriever(threading.Thread):
         if gzipped:
             logging.debug("Decompressing gzipped source file.")
             raw_strIO = cStringIO.StringIO(raw_buf)
-            buf = gzip.GzipFile(fileobj=raw_strIO)
+            f = gzip.GzipFile(fileobj=raw_strIO)
+            buf = cStringIO.StringIO(f.read())
             raw_strIO.close()
+            f.close()
         else:
             logging.debug("Decoding source file.")
             buf = cStringIO.StringIO(raw_buf)
