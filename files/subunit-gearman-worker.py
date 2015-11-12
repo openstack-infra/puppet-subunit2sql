@@ -170,7 +170,9 @@ class Subunit2SQLProcessor(object):
         self.config = subunit2sql_conf
         # Initialize subunit2sql settings
         shell.cli_opts()
+        extensions = shell.get_extensions()
         shell.parse_args([], [self.config])
+        self.extra_targets = shell.get_targets(extensions)
 
     def handle_subunit_event(self):
         # Pull subunit event from queue and separate stream from metadata
@@ -184,7 +186,8 @@ class Subunit2SQLProcessor(object):
         shell.CONF.set_override('run_meta', subunit)
         # Parse subunit stream and store in DB
         logging.debug('Converting Subunit V2 stream to SQL')
-        stream = read_subunit.ReadSubunit(subunit_v2)
+        stream = read_subunit.ReadSubunit(subunit_v2,
+                                          targets=self.extra_targets)
         shell.process_results(stream.get_results())
 
 
