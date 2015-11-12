@@ -41,7 +41,7 @@ class subunit2sql::server (
   }
 
   exec { 'backup_subunit2sql_db':
-    command     => 'mysqldump --defaults-file=/etc/subunit2sql-my.cnf --opt $db_name | gzip -9 > /opt/subunit2sql.sql.gz',
+    command     => "set -o pipefail; mysqldump --defaults-file=/etc/subunit2sql-my.cnf --opt ${db_name} | gzip -9 > /opt/subunit2sql.sql.gz",
     path        => '/usr/local/bin:/usr/bin:/bin/',
     subscribe   => Package['subunit2sql'],
     require     => File['/etc/subunit2sql-my.cnf'],
