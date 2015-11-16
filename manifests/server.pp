@@ -40,10 +40,18 @@ class subunit2sql::server (
     content => template('subunit2sql/subunit2sql-my.cnf.erb'),
   }
 
+  file {'/usr/local/bin/run_migrations.sh':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0555',
+    source  => 'puppet:///modules/subunit2sql/run_migrations.sh',
+    require => File['/etc/subunit2sql.conf']
+  }
+
   exec { 'upgrade_subunit2sql_db':
-    command     => 'subunit2sql-db-manage --config-file /etc/subunit2sql.conf upgrade head > /var/log/subunit2sql_migration.log 2>&1 &',
-    path        => '/usr/local/bin:/usr/bin:/bin/',
-    require     => File['/etc/subunit2sql-my.cnf'],
+    command     => '/usr/local/bin/run_migrations.sh',
+    require     => File['/usr/local/bin/run_migrations.sh'],
     subscribe   => Package['subunit2sql'],
     refreshonly => true,
     timeout     => 0,
