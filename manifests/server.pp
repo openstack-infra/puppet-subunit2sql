@@ -40,19 +40,11 @@ class subunit2sql::server (
     content => template('subunit2sql/subunit2sql-my.cnf.erb'),
   }
 
-  exec { 'backup_subunit2sql_db':
-    command     => "set -o pipefail; mysqldump --defaults-file=/etc/subunit2sql-my.cnf --opt ${db_name} | gzip -9 > /opt/subunit2sql.sql.gz",
-    path        => '/usr/local/bin:/usr/bin:/bin/',
-    subscribe   => Package['subunit2sql'],
-    require     => File['/etc/subunit2sql-my.cnf'],
-    refreshonly => true,
-    timeout     => 1800,
-  }
-
   exec { 'upgrade_subunit2sql_db':
     command     => 'subunit2sql-db-manage --config-file /etc/subunit2sql.conf upgrade head > /var/log/subunit2sql_migration.log 2>&1 &',
     path        => '/usr/local/bin:/usr/bin:/bin/',
-    subscribe   => Exec['backup_subunit2sql_db'],
+    require     => File['/etc/subunit2sql-my.cnf'],
+    subscribe   => Package['subunit2sql'],
     refreshonly => true,
     timeout     => 0,
   }
