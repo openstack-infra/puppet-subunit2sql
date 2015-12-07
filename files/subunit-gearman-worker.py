@@ -82,6 +82,9 @@ class SubunitRetriever(threading.Thread):
                 # Handle events ignoring aborted builds. These builds are
                 # discarded by zuul.
                 subunit_io = self._retrieve_subunit_v2(source_url, retry)
+                if not subunit_io:
+                    job.sendWorkException(
+                        'Unable to retrieve subunit stream'.encode('utf8'))
                 logging.debug("Pushing subunit files.")
                 out_event = fields.copy()
                 out_event["subunit"] = subunit_io
@@ -104,11 +107,13 @@ class SubunitRetriever(threading.Thread):
                              source_url)
             else:
                 logging.exception("Unable to get log data.")
+            return None
         except Exception:
             # Silently drop fatal errors when retrieving logs.
             # TODO (clarkb): Handle these errors.
             # Perhaps simply add a log message to raw_buf?
             logging.exception("Unable to get log data.")
+            return None
         if gzipped:
             logging.debug("Decompressing gzipped source file.")
             raw_strIO = cStringIO.StringIO(raw_buf)
