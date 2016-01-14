@@ -43,6 +43,14 @@ class subunit2sql (
     ],
   }
 
+  package { 'os-performance-tools':
+    ensure   => latest,
+    provider => 'pip',
+    require  => [
+      Class['pip']
+    ],
+  }
+
   package { 'testtools':
     ensure   => latest,
     provider => 'pip',
