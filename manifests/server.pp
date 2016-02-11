@@ -63,7 +63,7 @@ class subunit2sql::server (
 
   cron { 'subunit2sql-prune':
     ensure      => present,
-    command     => 'subunit2sql-db-manage --config-file /etc/subunit2sql.conf expire --expire-age $expire_age >> /var/log/subunit2sql_migration.log 2>&1 & ',
+    command     => "subunit2sql-db-manage --config-file /etc/subunit2sql.conf expire --expire-age ${expire_age} >> /var/log/subunit2sql_migration.log 2>&1 & ",
     minute      => $expire_cron_minute,
     hour        => $expire_cron_hour,
     weekday     => $expire_cron_weekday,
