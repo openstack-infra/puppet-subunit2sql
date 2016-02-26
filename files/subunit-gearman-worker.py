@@ -182,7 +182,11 @@ class Subunit2SQLProcessor(object):
         logging.debug('Converting Subunit V2 stream to SQL')
         stream = read_subunit.ReadSubunit(subunit_v2,
                                           targets=self.extra_targets)
-        shell.process_results(stream.get_results())
+        results = stream.get_results()
+        start_time = sorted(
+            [results[x]['start_time'] for x in results if x != 'run_time'])[0]
+        shell.CONF.set_override('run_at', start_time.isoformat())
+        shell.process_results(results)
         subunit_v2.close()
 
 
