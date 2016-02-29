@@ -85,11 +85,12 @@ class SubunitRetriever(threading.Thread):
                 if not subunit_io:
                     job.sendWorkException(
                         'Unable to retrieve subunit stream'.encode('utf8'))
-                logging.debug("Pushing subunit files.")
-                out_event = fields.copy()
-                out_event["subunit"] = subunit_io
-                self.subunitq.put(out_event)
-            job.sendWorkComplete()
+                else:
+                    logging.debug("Pushing subunit files.")
+                    out_event = fields.copy()
+                    out_event["subunit"] = subunit_io
+                    self.subunitq.put(out_event)
+                    job.sendWorkComplete()
         except Exception as e:
             logging.exception("Exception handling log event.")
             job.sendWorkException(str(e).encode('utf-8'))
