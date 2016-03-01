@@ -86,7 +86,11 @@ class SubunitRetriever(threading.Thread):
                     job.sendWorkException(
                         'Unable to retrieve subunit stream'.encode('utf8'))
                 else:
-                    logging.debug("Pushing subunit files.")
+                    if subunit_io.closed:
+                        logging.debug("Pushing closed subunit file: %s" %
+                                      subunit_io)
+                    else:
+                        logging.debug("Pushing subunit file: %s" % subunit_io)
                     out_event = fields.copy()
                     out_event["subunit"] = subunit_io
                     self.subunitq.put(out_event)
@@ -180,7 +184,12 @@ class Subunit2SQLProcessor(object):
             shell.CONF.set_override('artifacts', log_dir)
         shell.CONF.set_override('run_meta', subunit)
         # Parse subunit stream and store in DB
-        logging.debug('Converting Subunit V2 stream to SQL')
+        if subunit_v2.closed:
+            logging.debug('Trying to convert closed subunit v2 stream: %s to '
+                          'SQL' % subunit_v2)
+        else:
+            logging.debug('Converting Subunit V2 stream: %s to SQL' %
+                          subunit_v2)
         stream = read_subunit.ReadSubunit(subunit_v2,
                                           targets=self.extra_targets)
         results = stream.get_results()
