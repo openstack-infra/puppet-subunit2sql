@@ -15,10 +15,10 @@
 # under the License.
 
 import argparse
-import cStringIO
 import daemon
 import gear
 import gzip
+import io
 import json
 import logging
 import os
@@ -121,14 +121,14 @@ class SubunitRetriever(threading.Thread):
             return None
         if gzipped:
             logging.debug("Decompressing gzipped source file.")
-            raw_strIO = cStringIO.StringIO(raw_buf)
+            raw_strIO = io.BytesIO(raw_buf)
             f = gzip.GzipFile(fileobj=raw_strIO)
-            buf = cStringIO.StringIO(f.read())
+            buf = io.BytesIO(f.read())
             raw_strIO.close()
             f.close()
         else:
             logging.debug("Decoding source file.")
-            buf = cStringIO.StringIO(raw_buf)
+            buf = io.BytesIO(raw_buf)
         return buf
 
     def _get_subunit_data(self, source_url, retry):
