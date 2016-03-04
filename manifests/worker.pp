@@ -29,8 +29,8 @@ define subunit2sql::worker (
   if ! defined(File['/etc/logstash']) {
     file { '/etc/logstash':
       ensure => directory,
-      owner  => 'logstash',
-      group  => 'logstash',
+      owner  => 'root',
+      group  => 'root',
       mode   => '0644',
     }
   }
