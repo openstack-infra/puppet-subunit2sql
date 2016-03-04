@@ -17,9 +17,9 @@ DESC="Jenkins Subunit Worker"
 NAME=jenkins-subunit-worker<%= suffix %>
 DAEMON=/usr/local/bin/subunit-gearman-worker.py
 PIDFILE=/var/run/$NAME/$NAME.pid
-DAEMON_ARGS="-c /etc/logstash/jenkins-subunit-worker<%= suffix %>.yaml -d /var/log/logstash/subunit-worker<%= suffix %>-debug.log -p $PIDFILE"
+DAEMON_ARGS="-c /etc/subunit2sql/jenkins-subunit-worker<%= suffix %>.yaml -d /var/log/subunit2sql/subunit-worker<%= suffix %>-debug.log -p $PIDFILE"
 SCRIPTNAME=/etc/init.d/$NAME
-USER=logstash
+USER=subunit
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0

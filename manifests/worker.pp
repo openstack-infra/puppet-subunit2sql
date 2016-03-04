@@ -26,8 +26,17 @@ define subunit2sql::worker (
 ) {
   $suffix = "-${name}"
 
-  if ! defined(File['/etc/logstash']) {
-    file { '/etc/logstash':
+  file { '/etc/logstash/':
+    ensure => absent,
+  }
+
+  user { 'subunit':
+    ensure => present,
+    system => true,
+  }
+
+  if ! defined(File['/etc/subunit2sql']) {
+    file { '/etc/subunit2sql':
       ensure => directory,
       owner  => 'root',
       group  => 'root',
@@ -35,24 +44,24 @@ define subunit2sql::worker (
     }
   }
 
-  if ! defined(File['/etc/logstash/subunit2sql.conf']) {
-    file { '/etc/logstash/subunit2sql.conf':
+  if ! defined(File['/etc/subunit2sql/subunit2sql.conf']) {
+    file { '/etc/subunit2sql/subunit2sql.conf':
       ensure  => present,
       owner   => 'root',
       group   => 'root',
       mode    => '0555',
       content => template('subunit2sql/subunit2sql.conf.erb'),
-      require => File['/etc/logstash'],
+      require => File['/etc/subunit2sql'],
     }
   }
 
-  file { "/etc/logstash/jenkins-subunit-worker${suffix}.yaml":
+  file { "/etc/subunit2sql/jenkins-subunit-worker${suffix}.yaml":
     ensure  => present,
     owner   => 'root',
     group   => 'root',
     mode    => '0555',
     source  => $config_file,
-    require => File['/etc/logstash'],
+    require => File['/etc/subunit2sql'],
   }
 
   file { "/etc/init.d/jenkins-subunit-worker${suffix}":
@@ -63,7 +72,7 @@ define subunit2sql::worker (
     content => template('subunit2sql/jenkins-subunit-worker.init.erb'),
     require => [
       File['/usr/local/bin/subunit-gearman-worker.py'],
-      File["/etc/logstash/jenkins-subunit-worker${suffix}.yaml"],
+      File["/etc/subunit2sql/jenkins-subunit-worker${suffix}.yaml"],
     ],
   }
 
@@ -71,18 +80,18 @@ define subunit2sql::worker (
     enable     => true,
     hasrestart => true,
     subscribe  => [
-      File["/etc/logstash/jenkins-subunit-worker${suffix}.yaml"],
+      File["/etc/subunit2sql/jenkins-subunit-worker${suffix}.yaml"],
       Package['subunit2sql'],
     ],
     require    => [
-      File['/etc/logstash'],
+      File['/etc/subunit2sql'],
       File["/etc/init.d/jenkins-subunit-worker${suffix}"],
     ],
   }
 
   include ::logrotate
   logrotate::file { "subunit-worker${suffix}-debug.log":
-    log     => "/var/log/logstash/subunit-worker${suffix}-debug.log",
+    log     => "/var/log/subunit2sql/subunit-worker${suffix}-debug.log",
     options => [
       'compress',
       'copytruncate',
