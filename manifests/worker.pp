@@ -44,6 +44,15 @@ define subunit2sql::worker (
     }
   }
 
+if ! defined(File['/var/log/subunit2sql']) {
+    file { '/var/log/subunit2sql':
+      ensure  => directory,
+      owner   => 'subunit',
+      group   => 'subunit',
+      mode    => '0644',
+      require => User['subunit'],
+    }
+  }
   if ! defined(File['/etc/subunit2sql/subunit2sql.conf']) {
     file { '/etc/subunit2sql/subunit2sql.conf':
       ensure  => present,
