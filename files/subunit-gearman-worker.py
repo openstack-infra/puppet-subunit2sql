@@ -233,8 +233,6 @@ class Server(object):
                                           self.subunitqueue)
 
     def setup_processor(self):
-        # Note this processor will not work if the process is run as a
-        # daemon. You must use the --foreground option.
         subunit2sql_config = self.config['config']
         self.processor = Subunit2SQLProcessor(self.subunitqueue,
                                               subunit2sql_config)
