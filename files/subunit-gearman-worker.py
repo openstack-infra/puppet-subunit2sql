@@ -180,7 +180,17 @@ class Subunit2SQLProcessor(object):
         # Set run metadata from gearman
         log_url = subunit.pop('log_url', None)
         if log_url:
-            log_dir = os.path.dirname(os.path.dirname(log_url))
+            log_dir = os.path.dirname(log_url)
+
+            # log_dir should be the top-level directory containing a job run,
+            # but the subunit file may be nested in 0 - 2 subdirectories (top,
+            # logs/, or logs/old/), so we need to safely correct the path here
+            log_base = os.path.basename(log_dir)
+            if log_base == 'logs':
+                log_dir = os.path.dirname(log_dir)
+            elif log_base == 'old':
+                log_dir = os.path.dirname(os.path.dirname(log_dir))
+
             shell.CONF.set_override('artifacts', log_dir)
         shell.CONF.set_override('run_meta', subunit)
         # Parse subunit stream and store in DB
