@@ -121,8 +121,7 @@ class SubunitRetriever(threading.Thread):
                 # discarded by zuul.
                 subunit_io = self._retrieve_subunit_v2(source_url, retry)
                 if not subunit_io:
-                    job.sendWorkException(
-                        'Unable to retrieve subunit stream'.encode('utf8'))
+                    raise Exception('Unable to retrieve subunit stream')
                 else:
                     if subunit_io.closed:
                         logging.debug("Pushing closed subunit file: %s" %
@@ -132,7 +131,7 @@ class SubunitRetriever(threading.Thread):
                     out_event = fields.copy()
                     out_event["subunit"] = subunit_io
                     self._write_to_db(out_event)
-                    job.sendWorkComplete()
+            job.sendWorkComplete()
         except Exception as e:
             logging.exception("Exception handling log event.")
             job.sendWorkException(str(e).encode('utf-8'))
