@@ -23,7 +23,6 @@ import json
 import logging
 import os
 import socket
-import threading
 import time
 import urllib2
 import yaml
@@ -54,9 +53,9 @@ class FilterException(Exception):
     pass
 
 
-class SubunitRetriever(threading.Thread):
+class SubunitRetriever(object):
     def __init__(self, gearman_worker, filters, subunit2sql_conf):
-        threading.Thread.__init__(self)
+        super(SubunitRetriever, self).__init__()
         self.gearman_worker = gearman_worker
         self.filters = filters
         # Initialize subunit2sql settings
@@ -233,7 +232,7 @@ class Server(object):
 
     def main(self):
         self.setup_retriever()
-        self.retriever.start()
+        self.retriever.run()
 
 
 def main():
