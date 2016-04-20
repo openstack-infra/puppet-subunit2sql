@@ -233,8 +233,6 @@ class Server(object):
 
     def main(self):
         self.setup_retriever()
-
-        self.retriever.daemon = True
         self.retriever.start()
 
 
