@@ -29,13 +29,13 @@ class subunit2sql (
 
   package { 'python-subunit':
     ensure   => latest,
-    provider => 'pip',
+    provider => openstack_pip,
     require  => Class['pip'],
   }
 
   package { 'subunit2sql':
     ensure   => latest,
-    provider => 'pip',
+    provider => openstack_pip,
     require  => [
       Class['pip'],
       Package['python-mysqldb'],
@@ -45,7 +45,7 @@ class subunit2sql (
 
   package { 'os-performance-tools':
     ensure   => latest,
-    provider => 'pip',
+    provider => openstack_pip,
     require  => [
       Class['pip']
     ],
@@ -53,7 +53,7 @@ class subunit2sql (
 
   package { 'testtools':
     ensure   => latest,
-    provider => 'pip',
+    provider => openstack_pip,
     require  => Class['pip'],
   }
 
@@ -78,7 +78,7 @@ class subunit2sql (
   if ! defined(Package['gear']) {
     package { 'gear':
       ensure   => latest,
-      provider => 'pip',
+      provider => openstack_pip,
       require  => Class['pip'],
     }
   }
@@ -86,7 +86,7 @@ class subunit2sql (
   if ! defined(Package['statsd']) {
     package { 'statsd':
       ensure   => latest,
-      provider => 'pip',
+      provider => openstack_pip,
       require  => Class['pip']
     }
   }
