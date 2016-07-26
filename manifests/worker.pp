@@ -26,13 +26,17 @@ define subunit2sql::worker (
 ) {
   $suffix = "-${name}"
 
-  file { '/etc/logstash/':
-    ensure => absent,
+  if ! defined(File['/etc/logstash']) {
+    file { '/etc/logstash/':
+      ensure => absent,
+    }
   }
 
-  user { 'subunit':
-    ensure => present,
-    system => true,
+  if ! defined(User['subunit']) {
+    user { 'subunit':
+      ensure => present,
+      system => true,
+    }
   }
 
   if ! defined(File['/etc/subunit2sql']) {
