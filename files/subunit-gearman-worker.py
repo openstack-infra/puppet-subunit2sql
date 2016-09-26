@@ -91,7 +91,8 @@ class SubunitRetriever(object):
             logging.debug('Converting Subunit V2 stream: %s to SQL' %
                           subunit_v2)
         stream = read_subunit.ReadSubunit(subunit_v2,
-                                          targets=self.extra_targets)
+                                          targets=self.extra_targets,
+                                          use_wall_time=True)
         results = stream.get_results()
         start_time = sorted(
             [results[x]['start_time'] for x in results if x != 'run_time'])[0]
