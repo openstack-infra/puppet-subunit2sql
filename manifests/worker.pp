@@ -27,7 +27,7 @@ define subunit2sql::worker (
   $suffix = "-${name}"
 
   if ! defined(File['/etc/logstash']) {
-    file { '/etc/logstash/':
+    file { '/etc/logstash':
       ensure => absent,
     }
   }
