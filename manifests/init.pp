@@ -33,6 +33,12 @@ class subunit2sql (
     require  => Class['pip'],
   }
 
+  package {'paho-mqtt':
+    ensure   => latest,
+    provider => openstack_pip,
+    require  => Class['pip'],
+  }
+
   package { 'subunit2sql':
     ensure   => latest,
     provider => openstack_pip,
