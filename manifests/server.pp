@@ -16,10 +16,10 @@
 # == Class: subunit2sql
 #
 class subunit2sql::server (
-  $db_dialect = 'mysql',
-  $db_user = 'subunit2sql',
   $db_pass,
   $db_host,
+  $db_dialect = 'mysql',
+  $db_user = 'subunit2sql',
   $db_port = '3306',
   $db_name = 'subunit2sql',
   $expire_age = '186',
