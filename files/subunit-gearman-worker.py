@@ -246,14 +246,14 @@ class Server(object):
         self.config = config
         self.gearman_host = self.config['gearman-host']
         self.gearman_port = self.config['gearman-port']
-        mqtt_host = getattr(self.config, 'mqtt-host')
-        mqtt_port = getattr(self.config, 'mqtt-port', 1883)
-        mqtt_user = getattr(self.config, 'mqtt-user')
-        mqtt_pass = getattr(self.config, 'mqtt-pass')
-        mqtt_topic = getattr(self.config, 'mqtt-topic', 'gearman-subunit')
-        mqtt_ca_certs = getattr(self.config, 'mqtt-ca-certs')
-        mqtt_certfile = getattr(self.config, 'mqtt-certfile')
-        mqtt_keyfile = getattr(self.config, 'mqtt-keyfile')
+        mqtt_host = self.config.get('mqtt-host')
+        mqtt_port = self.config.get('mqtt-port', 1883)
+        mqtt_user = self.config.get('mqtt-user')
+        mqtt_pass = self.config.get('mqtt-pass')
+        mqtt_topic = self.config.get('mqtt-topic', 'gearman-subunit')
+        mqtt_ca_certs = self.config.get('mqtt-ca-certs')
+        mqtt_certfile = self.config.get('mqtt-certfile')
+        mqtt_keyfile = self.config.get('mqtt-keyfile')
         self.mqtt = None
         if mqtt_host:
             auth = None
