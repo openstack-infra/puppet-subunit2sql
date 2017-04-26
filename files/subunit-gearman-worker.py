@@ -111,6 +111,7 @@ class SubunitRetriever(object):
 
     def _handle_event(self):
         fields = {}
+        source_url = ''
         job = self.gearman_worker.getJob()
         try:
             arguments = json.loads(job.arguments.decode('utf-8'))
@@ -138,6 +139,7 @@ class SubunitRetriever(object):
             if self.mqtt:
                 msg = json.dumps({
                     'build_uuid': out_event.get('build_uuid'),
+                    'source_url': source_url,
                     'status': 'success',
                 })
                 self.mqtt.publish_single(msg, out_event.get('project'),
@@ -148,6 +150,7 @@ class SubunitRetriever(object):
             if self.mqtt:
                 msg = json.dumps({
                     'build_uuid': fields.get('build_uuid'),
+                    'source_url': source_url,
                     'status': 'failed',
                 })
                 self.mqtt.publish_single(msg, fields.get('project'),
