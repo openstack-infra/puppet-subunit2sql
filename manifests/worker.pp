@@ -31,6 +31,13 @@ define subunit2sql::worker (
       ensure => absent,
     }
   }
+  if ! defined(Package['paho-mqtt']) {
+    package {'paho-mqtt':
+      ensure   => latest,
+      provider => openstack_pip,
+      require  => Class['pip'],
+    }
+  }
 
   if ! defined(User['subunit']) {
     user { 'subunit':
