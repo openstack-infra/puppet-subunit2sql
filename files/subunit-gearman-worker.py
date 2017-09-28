@@ -73,6 +73,8 @@ class SubunitRetriever(object):
             project = meta['project'].split('/')[-1]
             if project not in job_name:
                 job_name = '-'.join([job_name, project])
+        if job_name.startswith('legacy-'):
+            job_name = job_name[7:]
         meta['build_name'] = job_name
         return meta
 
