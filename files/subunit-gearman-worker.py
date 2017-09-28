@@ -67,10 +67,20 @@ class SubunitRetriever(object):
         self.extra_targets = shell.get_targets(extensions)
         self.mqtt = mqtt
 
+    def _uniquify_name(self, meta):
+        job_name = meta.pop('build_name')
+        if 'tempest' not in job_name and 'dsvm' not in job_name:
+            project = meta['project'].split('/')[-1]
+            if project not in job_name:
+                job_name = '-'.join([job_name, project])
+        meta['build_name'] = job_name
+        return meta
+
     def _write_to_db(self, subunit):
         subunit_v2 = subunit.pop('subunit')
         # Set run metadata from gearman
         log_url = subunit.pop('log_url', None)
+        subunit = self._uniquify_name(subunit)
         if log_url:
             log_dir = os.path.dirname(log_url)
 
