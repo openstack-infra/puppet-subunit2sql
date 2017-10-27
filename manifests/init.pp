@@ -27,6 +27,10 @@ class subunit2sql (
     ensure => present,
   }
 
+  package {'python-netifaces':
+    ensure => present,
+  }
+
   package { 'python-subunit':
     ensure   => latest,
     provider => openstack_pip,
