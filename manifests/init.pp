@@ -43,7 +43,8 @@ class subunit2sql (
     require  => [
       Class['pip'],
       Package['python-mysqldb'],
-      Package['python-psycopg2']
+      Package['python-psycopg2'],
+      Package['python-netifaces']
     ],
   }
 
