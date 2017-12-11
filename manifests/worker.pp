@@ -101,7 +101,7 @@ if ! defined(File['/var/log/subunit2sql']) {
     hasrestart => true,
     subscribe  => [
       File["/etc/subunit2sql/jenkins-subunit-worker${suffix}.yaml"],
-      Package['subunit2sql'],
+      Exec['install-subunit2sql-safely'],
     ],
     require    => [
       File['/etc/subunit2sql'],

@@ -56,7 +56,7 @@ class subunit2sql::server (
   exec { 'upgrade_subunit2sql_db':
     command     => '/usr/local/bin/run_migrations.sh',
     require     => File['/usr/local/bin/run_migrations.sh'],
-    subscribe   => Package['subunit2sql'],
+    subscribe   => Exec['install-subunit2sql-safely'],
     refreshonly => true,
     timeout     => 0,
   }
