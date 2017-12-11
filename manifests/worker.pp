@@ -96,6 +96,17 @@ if ! defined(File['/var/log/subunit2sql']) {
     ],
   }
 
+  if ($::operatingsystem == 'Ubuntu') and ($::operatingsystemrelease >= '16.04') {
+    # This is a hack to make sure that systemd is aware of the new service
+    # before we attempt to start it.
+    exec { "jenkins-subunit-worker${suffix}-systemd-daemon-reload":
+      command     => '/bin/systemctl daemon-reload',
+      before      => Service["jenkins-subunit-worker${suffix}"],
+      subscribe   => File["/etc/init.d/jenkins-subunit-worker${suffix}"],
+      refreshonly => true,
+    }
+  }
+
   service { "jenkins-subunit-worker${suffix}":
     enable     => true,
     hasrestart => true,
