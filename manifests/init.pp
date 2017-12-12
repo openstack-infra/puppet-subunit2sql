@@ -50,7 +50,7 @@ class subunit2sql (
     # deps we've preinstalled from system packages because they lack wheels on
     # PyPI and must be otherwise rebuilt from sdist instead (specifically
     # netifaces).
-    onlyif  => '/bin/bash -c "test $(pip list --format columns | sed -ne \'s/^subunit2sql\s\+\(.*\)$/\1/p\') != $(pip search \'subunit2sql$\' | sed -ne \'s/^subunit2sql (\(.*\)).*$/\1/p\')"',
+    onlyif  => '/bin/bash -c "test \\"$(pip list --format columns | sed -ne \'s/^subunit2sql\s\+\(.*\)$/\1/p\')\\" != \\"$(pip search \'subunit2sql$\' | sed -ne \'s/^subunit2sql (\(.*\)).*$/\1/p\')\\""',
     require => [
       Class['pip'],
       Package['python-mysqldb'],
