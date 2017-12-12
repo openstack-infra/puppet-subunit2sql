@@ -38,7 +38,8 @@ class subunit2sql (
   }
 
   exec { 'install-subunit2sql-safely':
-    command => '/usr/bin/pip install --upgrade --upgrade-strategy=only-if-needed subunit2sql',
+    command => 'pip install --upgrade --upgrade-strategy=only-if-needed subunit2sql',
+    path    => '/usr/local/bin:/usr/bin:/bin/',
     # This checks the current installed subunit2sql version with pip list and
     # the latest version of subunit2sql on pypi with pip search and if they are
     # different then we know we need to upgrade to reconcile the local version
@@ -49,7 +50,7 @@ class subunit2sql (
     # deps we've preinstalled from system packages because they lack wheels on
     # PyPI and must be otherwise rebuilt from sdist instead (specifically
     # netifaces).
-    onlyif  => '/bin/bash -c "test $(/usr/bin/pip list --format columns | sed -ne \'s/^subunit2sql\s\+\(.*\)$/\1/p\') != $(/usr/bin/pip search \'subunit2sql$\' | sed -ne \'s/^subunit2sql (\(.*\)).*$/\1/p\')"',
+    onlyif  => '/bin/bash -c "test $(pip list --format columns | sed -ne \'s/^subunit2sql\s\+\(.*\)$/\1/p\') != $(pip search \'subunit2sql$\' | sed -ne \'s/^subunit2sql (\(.*\)).*$/\1/p\')"',
     require => [
       Class['pip'],
       Package['python-mysqldb'],
