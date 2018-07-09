@@ -85,12 +85,6 @@ class subunit2sql (
     }
   }
 
-  if ! defined(Package['python-yaml']) {
-    package { 'python-yaml':
-      ensure => present,
-    }
-  }
-
   if ! defined(Package['gear']) {
     package { 'gear':
       ensure   => latest,
@@ -116,7 +110,6 @@ class subunit2sql (
     require => [
       Package['python-daemon'],
       Package['python-zmq'],
-      Package['python-yaml'],
       Package['gear'],
       Exec['install-subunit2sql-safely'],
       Package['python-subunit'],
