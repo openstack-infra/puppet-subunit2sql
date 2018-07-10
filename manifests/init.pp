@@ -95,7 +95,11 @@ class subunit2sql (
 
   if ! defined(Package['statsd']) {
     package { 'statsd':
-      ensure   => latest,
+      # NOTE(cmurphy) If this is not pinned, the openstack_pip provider will
+      # attempt to install latest and conflict with the <3 cap from
+      # os-performance-tools. Unpin this when os-performance-tools raises its
+      # cap.
+      ensure   => '2.1.2',
       provider => openstack_pip,
       require  => Class['pip']
     }
