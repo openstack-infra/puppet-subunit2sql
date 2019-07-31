@@ -1,6 +1,3 @@
-# OpenStack Subunit2sql Module
+# This repo has moved to OpenDev
 
-## Overview
-
-Installs and configures subunit2sql - a tool to convert subunit results into
-a SQL database.
+It can now be found at [https://opendev.org/opendev/puppet-subunit2sql](https://opendev.org/opendev/puppet-subunit2sql)
